@@ -1,0 +1,106 @@
+// Define the available commands
+const commands = [
+  { name: "Open Settings", action: () => openSettings() },
+  { name: "Clear Cache", action: () => clearCache() },
+  { name: "Reload Page", action: () => reloadPage() },
+  // Add more commands as needed
+];
+
+// Function to open the command palette
+function openCommandPalette() {
+  const palette = document.createElement("div");
+  palette.id = "command-palette";
+  palette.style.position = "fixed";
+  palette.style.top = "50%";
+  palette.style.left = "50%";
+  palette.style.transform = "translate(-50%, -50%)";
+  palette.style.backgroundColor = "white";
+  palette.style.border = "1px solid #ccc";
+  palette.style.padding = "10px";
+  palette.style.zIndex = "9999";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = "Type a command...";
+  input.style.width = "300px";
+  input.style.marginBottom = "10px";
+  palette.appendChild(input);
+
+  const commandList = document.createElement("ul");
+  commandList.style.listStyle = "none";
+  commandList.style.padding = "0";
+  commandList.style.margin = "0";
+  palette.appendChild(commandList);
+
+  // Function to render the command list
+  function renderCommands(filter: string) {
+    commandList.innerHTML = "";
+    const filteredCommands = commands.filter((command) => command.name.toLowerCase().includes(filter.toLowerCase()));
+
+    filteredCommands.forEach((command) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = command.name;
+      listItem.style.cursor = "pointer";
+      listItem.style.padding = "5px";
+      listItem.addEventListener("click", () => {
+        command.action();
+        closeCommandPalette();
+      });
+      commandList.appendChild(listItem);
+    });
+  }
+
+  // Initial render of commands
+  renderCommands("");
+
+  // Event listener for input changes
+  input.addEventListener("input", (event) => {
+    const filter = (event.target as HTMLInputElement).value;
+    renderCommands(filter);
+  });
+
+  // Event listener for Enter key press
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const selectedCommand = commandList.querySelector("li");
+      if (selectedCommand) {
+        selectedCommand.click();
+      }
+    }
+  });
+
+  document.body.appendChild(palette);
+  input.focus();
+}
+
+// Function to close the command palette
+function closeCommandPalette() {
+  const palette = document.getElementById("command-palette");
+  if (palette) {
+    palette.remove();
+  }
+}
+
+// Event listener for the key combination to open the command palette
+document.addEventListener("keydown", (event) => {
+  if (event.ctrlKey && event.shiftKey && event.key === "p") {
+    event.preventDefault();
+    openCommandPalette();
+  }
+});
+
+// Example command actions
+function openSettings() {
+  console.log("Opening settings...");
+  // Add your logic to open settings
+}
+
+function clearCache() {
+  console.log("Clearing cache...");
+  // Add your logic to clear cache
+}
+
+function reloadPage() {
+  console.log("Reloading page...");
+  window.location.reload();
+}
