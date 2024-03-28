@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Input, List, ListItem, Heading, useDisclosure } from "@chakra-ui/react";
+import { Input, List, ListItem, Heading, useDisclosure } from "@chakra-ui/react";
+import "./Index.css";
 
 const commands = [
   { id: 1, name: "Command 1" },
@@ -46,21 +47,19 @@ const Index = () => {
   return (
     <>
       {isOpen && (
-        <Box position="fixed" top={0} left={0} right={0} bottom={0} bg="rgba(0, 0, 0, 0.5)" zIndex={9999} display="flex" justifyContent="center" alignItems="start" p={4}>
-          <Box bg="white" p={4} borderRadius="md" boxShadow="lg" width="100%" maxWidth="400px" ref={searchRef}>
-            <Heading size="lg" mb={4}>
-              Command Palette
-            </Heading>
-            <Input placeholder="Search commands..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} autoFocus />
-            <List mt={4}>
+        <div className="command-palette-overlay">
+          <div className="command-palette" ref={searchRef}>
+            <Heading className="command-palette-heading">Command Palette</Heading>
+            <Input className="command-palette-input" placeholder="Search commands..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} autoFocus />
+            <List className="command-palette-list">
               {filteredCommands.map((command) => (
-                <ListItem key={command.id} onClick={() => handleCommandClick(command)} cursor="pointer" _hover={{ bg: "gray.100" }} p={2}>
+                <ListItem key={command.id} className="command-palette-item" onClick={() => handleCommandClick(command)}>
                   {command.name}
                 </ListItem>
               ))}
             </List>
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
     </>
   );
